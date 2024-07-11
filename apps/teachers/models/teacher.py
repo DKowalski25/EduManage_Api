@@ -4,6 +4,8 @@ from sqlalchemy.sql import func
 
 from datetime import datetime
 
+from apps.students.models.group import Group
+from apps.events.models.teacher_class import teacher_class_association_table
 from db import Base
 
 
@@ -17,3 +19,6 @@ class Teacher(Base):
     phone_number: Mapped[int] = mapped_column(nullable=False)
     hashed_password: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
+
+    # Connection with the group. Many to many.
+    group: Mapped[list[Group]] = relationship(secondary=teacher_class_association_table, back_populates='teacher')
