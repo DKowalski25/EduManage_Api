@@ -2,7 +2,9 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import String
 
 from apps.teachers.models.teacher import Teacher
+from apps.events.models.task import Task
 from apps.events.models.teacher_class import teacher_class_association_table
+from apps.events.models.assigned_tasks import assigned_task_association_table
 
 from student import Student
 from db import Base
@@ -18,11 +20,5 @@ class Group(Base):
     student: Mapped[list[Student]] = relationship(back_populates="group")
     # Connection with the teacher. Many to many.
     teacher: Mapped[list[Teacher]] = relationship(secondary=teacher_class_association_table, back_populates='group')
-
-
-
-
-
-
-
-
+    # Connection with the task. Many to many.
+    task: Mapped[list[Task]] = relationship(secondary=assigned_task_association_table, back_populates='group')

@@ -4,6 +4,9 @@ from sqlalchemy.sql import func
 
 from datetime import datetime
 
+from apps.events.models.task import Task
+from apps.events.models.assigned_tasks import assigned_task_association_table
+
 from group import Group
 from db import Base
 
@@ -23,3 +26,5 @@ class Student(Base):
     # Connection to group. One to many.
     group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"))
     group: Mapped[Group] = relationship(back_populates="student")
+    # Connection with the task. Many to many
+    task: Mapped[list[Task]] = relationship(secondary=assigned_task_association_table, back_populates='student')
