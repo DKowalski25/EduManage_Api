@@ -6,6 +6,8 @@ from datetime import datetime
 
 from apps.students.models.group import Group
 from apps.events.models.teacher_class import teacher_class_association_table
+from apps.events.models.task import Task
+
 from db import Base
 
 
@@ -22,3 +24,5 @@ class Teacher(Base):
 
     # Connection with the group. Many to many.
     group: Mapped[list[Group]] = relationship(secondary=teacher_class_association_table, back_populates='teacher')
+    # Connection with the task. Many to one
+    task: Mapped[list[Task]] = relationship(back_populates='teacher')
