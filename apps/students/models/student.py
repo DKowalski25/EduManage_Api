@@ -1,9 +1,10 @@
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.sql import func
 
 from datetime import datetime
 
+from group import Group
 from db import Base
 
 
@@ -18,3 +19,7 @@ class Student(Base):
     grade: Mapped[int]
     hashed_password: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
+
+    # Connection to group. One to many.
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"))
+    group: Mapped[Group] = relationship(back_populates="student")
