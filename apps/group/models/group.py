@@ -1,12 +1,12 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import String, Column, Integer, Date
 
-from apps.users.models.user import Teacher
-from apps.events.models.assignment import Task
+# from apps.users.models.user import Teacher
+# from apps.events.models.assignment import Task
 from apps.events.models.teacher_class import teacher_class_association_table
-from apps.events.models.assigned_tasks import assigned_task_association_table
-
-from student import Student
+# from apps.events.models.assigned_tasks import assigned_task_association_table
+#
+# from student import Student
 from db import Base
 
 

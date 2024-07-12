@@ -1,3 +1,5 @@
 from .group import Group
 
-__all__ = ('Group',)
+__all__ = (
+    'Group',
+)
