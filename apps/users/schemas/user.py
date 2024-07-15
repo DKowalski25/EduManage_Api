@@ -1,46 +1,33 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 
-
-class TeacherClass(BaseModel):
-    group_id: int
-
-    class Config:
-        orm_mode = True
+from datetime import datetime
 
 
-class Task(BaseModel):
-    id: int
-    title: str
-    due_date: str
-
-    class Config:
-        orm_mode = True
-
-
-class FullTeacher(BaseModel):
-    id: int
+class UserBase(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
     phone_number: int
-    hashed_password: str
-    teacher_classes: list[TeacherClass] = []
-    tasks: list[Task] = []
-
-    model_config = ConfigDict(from_attributes=True)
-
-    class Config:
-        orm_mode = True
+    role: str
 
 
-class Teacher(BaseModel):
+class UserCreate(UserBase):
+    password: str
+    group_id: int
+
+
+class UserUpdate(UserBase):
+    group_id: int
+
+
+class User(UserBase):
     id: int
-    first_name: str
-    last_name: str
-    email: EmailStr
-
-    model_config = ConfigDict(from_attributes=True)
+    created_at: datetime
+    updated_at: datetime | None
+    classes: list[int] | None   # List of class IDs (for teachers).
+    assignments: list[int] | None   # List of assignment IDs.
+    assigned_tasks: list[int] | None    # List of assigned task IDs.
+    marks: list[int] | None    # List of mark IDs.
 
     class Config:
         orm_mode = True
-

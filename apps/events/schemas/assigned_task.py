@@ -1,26 +1,26 @@
-from pydantic import BaseModel, ConfigDict
-from datetime import date
+from pydantic import BaseModel
+from datetime import datetime
 
 
-class FullAssignedTasks(BaseModel):
+class AssignedTaskBase(BaseModel):
+    assigned_at: datetime
+
+
+class AssignedTaskCreate(AssignedTaskBase):
+    assignment_id: int
+    group_id: int | None
+    student_id: int | None
+
+
+class AssignedTaskUpdate(AssignedTaskBase):
+    pass
+
+
+class AssignedTask(AssignedTaskBase):
     id: int
     assignment_id: int
-    group_id: int | None = None
-    student_id: int | None = None
-    assigned_at: date
-
-    model_config = ConfigDict(from_attributes=True)
-
-    class Config:
-        orm_mode = True
-
-
-class AssignedTasks(BaseModel):
-    id: int
-    assignment_id: int
-    assigned_at: date
-
-    model_config = ConfigDict(from_attributes=True)
+    group_id: int | None
+    student_id: int | None
 
     class Config:
         orm_mode = True

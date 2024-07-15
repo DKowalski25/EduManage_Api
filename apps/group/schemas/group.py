@@ -1,41 +1,32 @@
 from pydantic import BaseModel, ConfigDict
 
-
-class Student(BaseModel):
-    id: int
-    first_name: str
-    last_name: str
-
-    class Config:
-        orm_mode = True
+from datetime import datetime
 
 
-class AssignedTask(BaseModel):
-    id: int
-    task_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class FullGroup(BaseModel):
-    id: int
+class GroupBase(BaseModel):
     group_name: str
-    students: list[Student] = []
-    assigned_tasks: list[AssignedTask] = []
-
-    model_config = ConfigDict(from_attributes=True)
-
-    class Config:
-        orm_mode = True
+    description: str
+    grade: int
 
 
-class Group(BaseModel):
+class GroupCreate(GroupBase):
+    pass
+
+
+class GroupUpdate(GroupBase):
+    pass
+
+
+class Group(GroupBase):
     id: int
-    group_name: str
-
-    model_config = ConfigDict(from_attributes=True)
+    created_at: datetime
+    updated_at: datetime
+    teachers: list[int] | None  # List of teacher IDs.
+    students: list[int] | None  # List of student IDs.
+    assigned_tasks: list[int] | None  # List of assigned task IDs.
 
     class Config:
         orm_mode = True
+
+
 
