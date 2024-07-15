@@ -2,11 +2,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import String, Column, Integer, DateTime
 from sqlalchemy.sql import func
 
-# from datetime import datetime
-
-# from apps.group.models.group import Group
 from apps.events.models.teacher_class import teacher_class_association_table
-# from apps.events.models.assignment import Task
 
 from db import Base
 

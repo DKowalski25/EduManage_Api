@@ -1,13 +1,6 @@
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import String, ForeignKey, Column, Integer, Date
-# from sqlalchemy.sql import func
-#
-# from datetime import datetime
-#
-# from apps.group.models.student import Student
-# from apps.group.models.group import Group
-#
-# from assigned_tasks import assigned_task_association_table
+
 
 from db import Base
 
