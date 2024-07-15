@@ -1,3 +1,8 @@
-from .user import Teacher
+from .user import UserBase, UserCreate, UserUpdate, User
 
-__all__ = ('Teacher',)
+__all__ = (
+    'UserBase',
+    'UserCreate',
+    'UserUpdate',
+    'User'
+)
