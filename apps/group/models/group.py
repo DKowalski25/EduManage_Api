@@ -1,9 +1,7 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import String, Column, Integer, Date
 
-
-from apps.events.models.teacher_class import teacher_class_association_table
-
+from apps.users.models.user import teacher_class_association_table
 
 from db import Base
 

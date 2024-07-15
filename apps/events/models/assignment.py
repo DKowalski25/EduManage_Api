@@ -1,6 +1,5 @@
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy.orm import relationship
 from sqlalchemy import String, ForeignKey, Column, Integer, Date
-
 
 from db import Base
 
@@ -18,3 +17,4 @@ class Assignment(Base):
     # Relationships
     teacher = relationship("User", back_populates="assignments")
     assigned_tasks = relationship("AssignedTask", back_populates="assignment")
+    marks = relationship("Mark", back_populates="assignment")

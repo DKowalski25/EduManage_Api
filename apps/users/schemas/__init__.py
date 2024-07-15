@@ -1,3 +1,3 @@
-from .teacher import Teacher
+from .user import Teacher
 
 __all__ = ('Teacher',)

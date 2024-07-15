@@ -1,10 +1,15 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import String, Column, Integer, DateTime
+from sqlalchemy import String, Column, Integer, DateTime, Table, ForeignKey
 from sqlalchemy.sql import func
 
-from apps.events.models.teacher_class import teacher_class_association_table
-
 from db import Base
+
+teacher_class_association_table = Table(
+    "teacher_class_association_table",
+    Base.metadata,
+    Column('teacher_id', ForeignKey("users.id"), primary_key=True),
+    Column('group_id', ForeignKey('groups.id'), primary_key=True)
+)
 
 
 class User(Base):
@@ -31,3 +36,4 @@ class User(Base):
     )
     assignments = relationship("Assignment", back_populates="teacher")
     assigned_tasks = relationship("AssignedTask", back_populates="student")
+    marks = relationship("Mark", back_populates="student")
