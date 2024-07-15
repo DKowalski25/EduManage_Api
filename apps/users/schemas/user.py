@@ -24,10 +24,10 @@ class User(UserBase):
     id: int
     created_at: datetime
     updated_at: datetime | None
-    classes: list[int] | None   # List of class IDs (for teachers).
-    assignments: list[int] | None   # List of assignment IDs.
-    assigned_tasks: list[int] | None    # List of assigned task IDs.
-    marks: list[int] | None    # List of mark IDs.
+    classes: list[int] | None  # List of class IDs (for teachers).
+    assignments: list[int] | None  # List of assignment IDs.
+    assigned_tasks: list[int] | None  # List of assigned task IDs.
+    marks: list[int] | None  # List of mark IDs.
 
     class Config:
         orm_mode = True

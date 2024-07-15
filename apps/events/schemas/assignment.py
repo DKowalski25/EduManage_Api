@@ -21,8 +21,7 @@ class Assignment(AssignmentBase):
     id: int
     created_at = datetime
     teacher_id: int
-    assigned_tasks: list[int] | None    # List of assigned task IDs.
+    assigned_tasks: list[int] | None  # List of assigned task IDs.
 
     class Config:
         orm_mode = True
-

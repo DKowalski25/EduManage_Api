@@ -27,6 +27,3 @@ class Group(GroupBase):
 
     class Config:
         orm_mode = True
-
-
-
