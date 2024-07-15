@@ -33,12 +33,12 @@ LOGURU_FORMAT = (
     "[<level>{level}</level>] "
     "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>\n"
 )
-#
+
 # AUTH_SECRET_KEY = os.environ.get('AUTH_SECRET_KEY')
 # AUTH_HASHING_ALGORITHM = "HS256"
 # AUTH_ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get('AUTH_ACCESS_TOKEN_EXPIRE_MINUTES'))
 # AUTH_REFRESH_TOKEN_EXPIRE_MINUTES = int(os.environ.get('AUTH_REFRESH_TOKEN_EXPIRE_MINUTES'))
-#
-# APP_VERSION = "0.1"
-# APP_API_NAME = "Python Template API"
-# APP_ADMIN_NAME = "Python Template Admin"
+
+APP_VERSION = "0.1"
+APP_API_NAME = "Edumanage API"
+APP_ADMIN_NAME = "Edumanage Admin"
