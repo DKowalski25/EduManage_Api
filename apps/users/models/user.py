@@ -27,6 +27,7 @@ class User(Base):
     role = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    group_id = Column(Integer, ForeignKey("groups.id"))
 
     # Relationships
     classes = relationship(
@@ -37,3 +38,4 @@ class User(Base):
     assignments = relationship("Assignment", back_populates="teacher")
     assigned_tasks = relationship("AssignedTask", back_populates="student")
     marks = relationship("Mark", back_populates="student")
+    group = relationship("Group", back_populates="students", foreign_keys=[group_id])
