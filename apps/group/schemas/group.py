@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from datetime import datetime
 
@@ -25,5 +25,4 @@ class Group(GroupBase):
     students: list[int] | None  # List of student IDs.
     assigned_tasks: list[int] | None  # List of assigned task IDs.
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

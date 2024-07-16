@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from datetime import datetime
 
@@ -23,5 +23,4 @@ class Assignment(AssignmentBase):
     teacher_id: int
     assigned_tasks: list[int] | None  # List of assigned task IDs.
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
