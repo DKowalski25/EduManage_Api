@@ -7,17 +7,16 @@ class UserBase(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
-    phone_number: int
+    phone_number: str
     role: str
 
 
 class UserCreate(UserBase):
     password: str
-    group_id: int
 
 
 class UserUpdate(UserBase):
-    group_id: int
+    pass
 
 
 class User(UserBase):
@@ -29,6 +28,7 @@ class User(UserBase):
     assigned_tasks: list[int] | None  # List of assigned task IDs.
     marks: list[int] | None  # List of mark IDs.
 
+    # model_config = ConfigDict(from_attributes=True)
+
     class Config:
         from_attributes = True
-

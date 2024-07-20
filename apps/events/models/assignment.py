@@ -18,20 +18,12 @@ class Assignment(Base):
     teacher = relationship(
         "User",
         back_populates="assignments",
-        # lazy="selectin"
     )
     assigned_tasks = relationship(
         "AssignedTask",
         back_populates="assignment",
-        # lazy="subquery"
     )
     marks = relationship(
         "Mark",
         back_populates="assignment",
-        # lazy="selectin"
     )
-
-    @property
-    def awaitable_attrs(self):
-        # Возвращаем список атрибутов, которые могут быть получены как awaitable
-        return ["teacher", "assigned_tasks", "marks"]

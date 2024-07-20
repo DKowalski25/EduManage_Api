@@ -17,20 +17,12 @@ class AssignedTask(Base):
     assignment = relationship(
         "Assignment",
         back_populates="assigned_tasks",
-        # lazy="selectin"
     )
     group = relationship(
         "Group",
         back_populates="assigned_tasks",
-        # lazy="subquery"
     )
     student = relationship(
         "User",
         back_populates="assigned_tasks",
-        # lazy="subquery"
     )
-
-    @property
-    def awaitable_attrs(self):
-        # Возвращаем список атрибутов, которые могут быть получены как awaitable
-        return ["assignment", "group", "student"]

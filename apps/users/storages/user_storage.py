@@ -1,13 +1,13 @@
 import random
 import hashlib
 import string
-from typing import Optional
 
 from passlib.context import CryptContext
 from sqlalchemy.future import select
 from datetime import datetime
 
-from apps.group.models.group import Group as GroupModel
+from sqlalchemy.orm import selectinload
+
 from ..models import User as UserModel
 from ..schemas import User, UserCreate, UserUpdate
 
@@ -44,89 +44,113 @@ class UserStorage:
     @classmethod
     async def get_all_users(cls) -> list[User]:
         async with async_session() as session:
-            result = await session.execute(select(cls._table))
+            # Request to get all users with related data download
+            stmt = select(cls._table).options(
+                selectinload(cls._table.classes),
+                selectinload(cls._table.assignments),
+                selectinload(cls._table.assigned_tasks),
+                selectinload(cls._table.marks)
+            )
+            result = await session.execute(stmt)
             users = result.scalars().all()
-            for user in users:
-                await user.awaitable_attrs.group
-                await user.awaitable_attrs.assignments
-                await user.awaitable_attrs.assigned_tasks
-                await user.awaitable_attrs.marks
-        return [User.model_validate(user) for user in users]
+
+            return [User.from_orm(user) for user in users]
 
     @classmethod
-    async def get_user_by_id(cls, user_id: int) -> Optional[User]:
+    async def get_user_by_id(cls, user_id: int) -> User | None:
         async with async_session() as session:
             query = await session.execute(select(cls._table).filter(cls._table.id == user_id))
             user = query.scalar()
-            if user:
-                await user.awaitable_attrs.group
-                await user.awaitable_attrs.assignments
-                await user.awaitable_attrs.assigned_tasks
-                await user.awaitable_attrs.marks
+        async with async_session() as session:
+            # Reading a created user using selectonload
+            stmt = select(cls._table).filter_by(id=user.id).options(
+                selectinload(cls._table.classes),
+                selectinload(cls._table.assignments),
+                selectinload(cls._table.assigned_tasks),
+                selectinload(cls._table.marks)
+            )
+            result = await session.execute(stmt)
+            user = result.scalars().one_or_none()
         return User.model_validate(user) if user else None
 
     @classmethod
-    async def create_user(cls, user_create: UserCreate) -> Optional[User]:
+    async def create_user(cls, user_create: UserCreate) -> User:
         salt, hashed_password = hash_password(user_create.password)
         async with async_session() as session:
-            async with session.begin():
-                user = cls._table(
-                    first_name=user_create.first_name,
-                    last_name=user_create.last_name,
-                    email=user_create.email,
-                    phone_number=user_create.phone_number,
-                    role=user_create.role,
-                    hashed_password=f"{salt}${hashed_password}",
-                    created_at=datetime.now()
-                )
-                if user_create.group_id:
-                    group = await session.get(GroupModel, user_create.group_id)
-                    if group:
-                        user.group = group
+            user = cls._table(
+                first_name=user_create.first_name,
+                last_name=user_create.last_name,
+                email=user_create.email,
+                phone_number=user_create.phone_number,
+                role=user_create.role,
+                hashed_password=f"{salt}${hashed_password}",
+                created_at=datetime.now()
+            )
+            session.add(user)
+            await session.commit()
+            # Executing a request to get a newly created user
+        async with async_session() as session:
+            # Reading a created user using selectonload
+            stmt = select(cls._table).filter_by(id=user.id).options(
+                selectinload(cls._table.classes),
+                selectinload(cls._table.assignments),
+                selectinload(cls._table.assigned_tasks),
+                selectinload(cls._table.marks)
+            )
+            result = await session.execute(stmt)
+            user = result.scalars().one_or_none()
+        return User.model_validate(user)
 
-                session.add(user)
+    @classmethod
+    async def update_user(cls, user_id: int, user_update: UserUpdate) -> User:
+        async with async_session() as session:
+            # Request for getting user with selectinload
+            stmt = select(cls._table).filter(cls._table.id == user_id).options(
+                selectinload(cls._table.classes),
+                selectinload(cls._table.assignments),
+                selectinload(cls._table.assigned_tasks),
+                selectinload(cls._table.marks)
+            )
+            result = await session.execute(stmt)
+            user = result.scalar_one()
+
+            if user:
+                # Updating user fields
+                for field, value in user_update.dict(exclude_unset=True).items():
+                    setattr(user, field, value)
+
                 await session.commit()
-                # await session.refresh(user)
-                # Инициализируем атрибуты внутри транзакции
-                print(user)
-                await user.awaitable_attrs.group
-                await user.awaitable_attrs.assignments
-                await user.awaitable_attrs.assigned_tasks
-                await user.awaitable_attrs.marks
-                return User.model_validate(user)
+            async with async_session() as session:
+                # Reading a created user using selectonload
+                stmt = select(cls._table).filter_by(id=user.id).options(
+                    selectinload(cls._table.classes),
+                    selectinload(cls._table.assignments),
+                    selectinload(cls._table.assigned_tasks),
+                    selectinload(cls._table.marks)
+                )
+                result = await session.execute(stmt)
+                user = result.scalars().one_or_none()
+
+            # Return updated user
+            return User.model_validate(user)
 
     @classmethod
-    async def update_user(cls, user_id: int, user_update: UserUpdate) -> Optional[User]:
+    async def delete_user(cls, user_id: int) -> User:
         async with async_session() as session:
-            async with session.begin():
-                result = await session.execute(select(cls._table).filter(cls._table.id == user_id))
-                user = result.scalar()
-                if user:
-                    for field, value in user_update.dict(exclude_unset=True).items():
-                        setattr(user, field, value)
-                    await session.commit()
-                    await session.refresh(user)
-                    # Инициализируем атрибуты внутри транзакции
-                    await user.awaitable_attrs.group
-                    await user.awaitable_attrs.assignments
-                    await user.awaitable_attrs.assigned_tasks
-                    await user.awaitable_attrs.marks
-                    return User.model_validate(user)
-        return None
+            # Request for getting user with selectinload
+            stmt = select(cls._table).filter(cls._table.id == user_id).options(
+                selectinload(cls._table.classes),
+                selectinload(cls._table.assignments),
+                selectinload(cls._table.assigned_tasks),
+                selectinload(cls._table.marks)
+            )
+            result = await session.execute(stmt)
+            user = result.scalar()
 
-    @classmethod
-    async def delete_user(cls, user_id: int) -> Optional[User]:
-        async with async_session() as session:
-            async with session.begin():
-                result = await session.execute(select(cls._table).filter(cls._table.id == user_id))
-                user = result.scalar()
-                if user:
-                    session.delete(user)
-                    await session.commit()
-                    # Инициализируем атрибуты внутри транзакции
-                    await user.awaitable_attrs.group
-                    await user.awaitable_attrs.assignments
-                    await user.awaitable_attrs.assigned_tasks
-                    await user.awaitable_attrs.marks
-                    return User.model_validate(user)
-        return None
+            if user:
+                # Delete user
+                await session.delete(user)  # use await
+                await session.commit()
+
+            # Return deleted user
+        return User.model_validate(user)

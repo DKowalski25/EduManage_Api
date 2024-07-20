@@ -17,7 +17,7 @@ class User(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
-    phone_number = Column(Integer, nullable=False)
+    phone_number = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -29,31 +29,21 @@ class User(Base):
         "Group",
         secondary=teacher_class_association_table,
         back_populates="teachers",
-        # lazy="subquery"
     )
     assignments = relationship(
         "Assignment",
         back_populates="teacher",
-        # lazy="selectin"
     )
     assigned_tasks = relationship(
         "AssignedTask",
         back_populates="student",
-        # lazy="selectin"
     )
     marks = relationship(
         "Mark",
         back_populates="student",
-        # lazy="selectin"
     )
     group = relationship(
         "Group",
         back_populates="students",
         foreign_keys=[group_id],
-        # lazy="selectin"
     )
-
-    @property
-    def awaitable_attrs(self):
-        # Возвращаем список атрибутов, которые могут быть получены как awaitable
-        return ["group"]
