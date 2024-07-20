@@ -1,8 +1,7 @@
-from .user import UserBase, UserCreate, UserUpdate, User
+from .user import UserBase, UserCreate, User
 
 __all__ = (
     'UserBase',
     'UserCreate',
-    'UserUpdate',
-    'User'
+    'User',
 )
