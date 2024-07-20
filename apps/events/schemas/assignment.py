@@ -23,4 +23,5 @@ class Assignment(AssignmentBase):
     teacher_id: int
     assigned_tasks: list[int] | None  # List of assigned task IDs.
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True

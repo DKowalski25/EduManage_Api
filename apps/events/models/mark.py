@@ -14,5 +14,18 @@ class Mark(Base):
     date = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
-    student = relationship("User", back_populates="marks")
-    assignment = relationship("Assignment", back_populates="marks")
+    student = relationship(
+        "User",
+        back_populates="marks",
+        # lazy="subquery"
+    )
+    assignment = relationship(
+        "Assignment",
+        back_populates="marks",
+        # lazy="subquery"
+    )
+
+    @property
+    def awaitable_attrs(self):
+        # Возвращаем список атрибутов, которые могут быть получены как awaitable
+        return ["student", "assignment"]

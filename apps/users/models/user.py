@@ -1,15 +1,10 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import String, Column, Integer, DateTime, Table, ForeignKey
+from sqlalchemy import String, Column, Integer, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
-from db import Base
+from apps.events.models.teacher_class import teacher_class_association_table
 
-teacher_class_association_table = Table(
-    "teacher_class_association_table",
-    Base.metadata,
-    Column('teacher_id', ForeignKey("users.id"), primary_key=True),
-    Column('group_id', ForeignKey('groups.id'), primary_key=True)
-)
+from db import Base
 
 
 class User(Base):
@@ -33,9 +28,32 @@ class User(Base):
     classes = relationship(
         "Group",
         secondary=teacher_class_association_table,
-        back_populates="teachers"
+        back_populates="teachers",
+        # lazy="subquery"
     )
-    assignments = relationship("Assignment", back_populates="teacher")
-    assigned_tasks = relationship("AssignedTask", back_populates="student")
-    marks = relationship("Mark", back_populates="student")
-    group = relationship("Group", back_populates="students", foreign_keys=[group_id])
+    assignments = relationship(
+        "Assignment",
+        back_populates="teacher",
+        # lazy="selectin"
+    )
+    assigned_tasks = relationship(
+        "AssignedTask",
+        back_populates="student",
+        # lazy="selectin"
+    )
+    marks = relationship(
+        "Mark",
+        back_populates="student",
+        # lazy="selectin"
+    )
+    group = relationship(
+        "Group",
+        back_populates="students",
+        foreign_keys=[group_id],
+        # lazy="selectin"
+    )
+
+    @property
+    def awaitable_attrs(self):
+        # Возвращаем список атрибутов, которые могут быть получены как awaitable
+        return ["group"]

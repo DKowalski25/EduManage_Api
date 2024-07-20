@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr
 
 from datetime import datetime
 
@@ -29,4 +29,6 @@ class User(UserBase):
     assigned_tasks: list[int] | None  # List of assigned task IDs.
     marks: list[int] | None  # List of mark IDs.
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
+

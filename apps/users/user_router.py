@@ -32,7 +32,7 @@ async def get_all_users(
     return await user_cases.get_all_users()
 
 
-@router.get("/users{user_id}", response_model=User)
+@router.get("/users/{user_id}", response_model=User)
 @inject
 async def get_user_by_id(
         user_id: int,
@@ -41,7 +41,7 @@ async def get_user_by_id(
     return await user_cases.get_user_by_id(user_id)
 
 
-@router.patch("/users{user_id}", response_model=User)
+@router.patch("/users/{user_id}", response_model=User)
 @inject
 async def update_user(
         user_id: int,
@@ -51,7 +51,7 @@ async def update_user(
     return await user_cases.update_user(user_id, user_update)
 
 
-@router.delete("/users{user_id}", response_model=User)
+@router.delete("/users/{user_id}", response_model=User)
 @inject
 async def delete_user(
         user_id: int,

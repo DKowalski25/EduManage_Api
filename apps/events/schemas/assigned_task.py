@@ -22,4 +22,5 @@ class AssignedTask(AssignedTaskBase):
     group_id: int | None
     student_id: int | None
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
