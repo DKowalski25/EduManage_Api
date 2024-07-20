@@ -54,7 +54,7 @@ class UserStorage:
             result = await session.execute(stmt)
             users = result.scalars().all()
 
-            return [User.from_orm(user) for user in users]
+            return [User.model_validate(user) for user in users]
 
     @classmethod
     async def get_user_by_id(cls, user_id: int) -> User | None:

@@ -3,10 +3,9 @@ from fastapi import FastAPI, Depends
 from .get_routers import GetRouters
 from .decorate_fast_api import decorate_fast_api
 from ..loggers.log_request import log_requets_params
-from settings.development import LOG_REQUEST        #!! check it
+from settings.development import LOG_REQUEST  # !! check it
 
-
-SUPPORTED_VERSIONS = ('v1', )
+SUPPORTED_VERSIONS = ('v1',)
 
 
 def get_application() -> FastAPI:
