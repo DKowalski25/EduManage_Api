@@ -21,22 +21,15 @@ class Group(Base):
         "User",
         secondary=teacher_class_association_table,
         back_populates="classes",
-        # lazy="subquery"
     )
     students = relationship(
         "User",
         back_populates="group",
         foreign_keys="[User.group_id]",
-        # lazy="selectin"
     )
     assigned_tasks = relationship(
         "AssignedTask",
         back_populates="group",
-        # lazy="selectin"
     )
 
-    @property
-    def awaitable_attrs(self):
-        # Возвращаем список атрибутов, которые могут быть получены как awaitable
-        return ["students", "assigned_tasks"]
 
