@@ -102,7 +102,7 @@ class MarkStorage:
 
             if mark:
                 # Delete mark
-                session.delete(mark)
+                await session.delete(mark)
                 await session.commit()
         # Return deleted mark
         return Mark.model_validate(mark)
