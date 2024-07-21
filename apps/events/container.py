@@ -21,11 +21,11 @@ class Container(containers.DeclarativeContainer):
         assignment_repo=assignment_storage
     )
 
-    # assigned_task_storage = providers.Singleton(
-    #     AssignedTaskStorage
-    # )
-    # assigned_task_cases = providers.Singleton(
-    #     AssignedTaskCases,
-    #     assigned_task_repo=assigned_task_storage
-    # )
+    assigned_task_storage = providers.Singleton(
+        AssignedTaskStorage
+    )
+    assigned_task_cases = providers.Singleton(
+        AssignedTaskCases,
+        assigned_task_repo=assigned_task_storage
+    )
 

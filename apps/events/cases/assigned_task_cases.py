@@ -15,5 +15,9 @@ class AssignedTaskCases:
     async def get_assigned_task_by_id(self, assigned_task_id: int) -> AssignedTask:
         return await self.assigned_task_repo.get_assigned_task_by_id(assigned_task_id)
 
+    async def update_assignment(self, assigned_task_id: int, assigned_task_update: AssignedTaskUpdate
+                                ) -> AssignedTask | None:
+        return await self.assigned_task_repo.update_assigned_task(assigned_task_id, assigned_task_update)
+
     async def delete_assigned_task(self, assigned_task_id: int) -> AssignedTask | None:
         return await self.assigned_task_repo.delete_assigned_task(assigned_task_id)

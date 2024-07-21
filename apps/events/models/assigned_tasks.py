@@ -9,7 +9,7 @@ class AssignedTask(Base):
 
     id = Column(Integer, primary_key=True)
     assignment_id = Column(Integer, ForeignKey("assignments.id"), nullable=False)
-    group_id = Column(Integer, ForeignKey("groups.id"))
+    group_id = Column(Integer, ForeignKey("groups.id"), nullable=True)
     student_id = Column(Integer, ForeignKey("users.id"))
     assigned_at = Column(Date, nullable=False)
 
