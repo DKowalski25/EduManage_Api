@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -8,8 +10,8 @@ class AssignedTaskBase(BaseModel):
 
 class AssignedTaskCreate(AssignedTaskBase):
     assignment_id: int
-    group_id: int | None
-    student_id: int | None
+    group_id: Optional[int]
+    student_id: Optional[int]
 
 
 class AssignedTaskUpdate(AssignedTaskBase):
@@ -23,4 +25,4 @@ class AssignedTask(AssignedTaskBase):
     student_id: int | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

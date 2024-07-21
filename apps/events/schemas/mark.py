@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 
@@ -22,4 +22,4 @@ class Mark(MarkBase):
     date: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

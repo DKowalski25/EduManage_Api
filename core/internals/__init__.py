@@ -1,7 +1,7 @@
 from .orm_internal_service import OrmInternalService
-from .base_import_service import BaseImportService
+from .get_application import get_application
 
 __all__ = (
     'OrmInternalService',
-    'BaseImportService',
+    'get_application',
 )

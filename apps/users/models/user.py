@@ -1,15 +1,10 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import String, Column, Integer, DateTime, Table, ForeignKey
+from sqlalchemy import String, Column, Integer, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
-from db import Base
+from apps.events.models.teacher_class import teacher_class_association_table
 
-teacher_class_association_table = Table(
-    "teacher_class_association_table",
-    Base.metadata,
-    Column('teacher_id', ForeignKey("users.id"), primary_key=True),
-    Column('group_id', ForeignKey('groups.id'), primary_key=True)
-)
+from db import Base
 
 
 class User(Base):
@@ -22,7 +17,7 @@ class User(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
-    phone_number = Column(Integer, nullable=False)
+    phone_number = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -33,9 +28,22 @@ class User(Base):
     classes = relationship(
         "Group",
         secondary=teacher_class_association_table,
-        back_populates="teachers"
+        back_populates="teachers",
     )
-    assignments = relationship("Assignment", back_populates="teacher")
-    assigned_tasks = relationship("AssignedTask", back_populates="student")
-    marks = relationship("Mark", back_populates="student")
-    group = relationship("Group", back_populates="students", foreign_keys=[group_id])
+    assignments = relationship(
+        "Assignment",
+        back_populates="teacher",
+    )
+    assigned_tasks = relationship(
+        "AssignedTask",
+        back_populates="student",
+    )
+    marks = relationship(
+        "Mark",
+        back_populates="student",
+    )
+    group = relationship(
+        "Group",
+        back_populates="students",
+        foreign_keys=[group_id],
+    )

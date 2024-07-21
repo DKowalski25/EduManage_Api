@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from datetime import datetime
 
@@ -19,9 +19,9 @@ class AssignmentUpdate(AssignmentBase):
 
 class Assignment(AssignmentBase):
     id: int
-    created_at = datetime
+    created_at: datetime
     teacher_id: int
     assigned_tasks: list[int] | None  # List of assigned task IDs.
 
     class Config:
-        orm_mode = True
+        from_attributes = True

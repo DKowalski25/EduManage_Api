@@ -15,6 +15,15 @@ class Assignment(Base):
     teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     # Relationships
-    teacher = relationship("User", back_populates="assignments")
-    assigned_tasks = relationship("AssignedTask", back_populates="assignment")
-    marks = relationship("Mark", back_populates="assignment")
+    teacher = relationship(
+        "User",
+        back_populates="assignments",
+    )
+    assigned_tasks = relationship(
+        "AssignedTask",
+        back_populates="assignment",
+    )
+    marks = relationship(
+        "Mark",
+        back_populates="assignment",
+    )
