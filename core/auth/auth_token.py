@@ -1,20 +1,12 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from fastapi import HTTPException, status
-from fastapi_jwt import (
-    JwtAccessBearer,
-)
-from jose import jwt
+
+import jwt  # Used pyjwt
 from settings import (
     AUTH_ACCESS_TOKEN_EXPIRE_MINUTES,
     AUTH_SECRET_KEY,
     AUTH_REFRESH_TOKEN_EXPIRE_MINUTES,
-)
-
-
-access_security = JwtAccessBearer(
-    secret_key=AUTH_SECRET_KEY,
-    auto_error=False,
-    access_expires_delta=timedelta(minutes=AUTH_ACCESS_TOKEN_EXPIRE_MINUTES),
+    AUTH_HASHING_ALGORITHM
 )
 
 
@@ -24,35 +16,38 @@ class AuthToken:
     https://indominusbyte.github.io/fastapi-jwt-auth/usage/basic/
     """
 
+    @staticmethod
     def generate_access_token(data: dict) -> str:
-        return access_security.create_access_token(subject=data)
+        to_encode = data.copy()
+        expire = datetime.utcnow() + timedelta(minutes=AUTH_ACCESS_TOKEN_EXPIRE_MINUTES)
+        to_encode.update({"exp": expire})
+        return jwt.encode(to_encode, AUTH_SECRET_KEY, algorithm=AUTH_HASHING_ALGORITHM)
 
     @staticmethod
     def generate_pair(data: dict) -> dict:
-        expires_refresh_token = timedelta(minutes=AUTH_REFRESH_TOKEN_EXPIRE_MINUTES)
-        return {
-            "access_token": access_security.create_access_token(subject=data),
-            "refresh_token": access_security.create_refresh_token(
-                subject=data, expires_delta=expires_refresh_token
-            ),
-        }
+        access_token = AuthToken.generate_access_token(data)
+        expire_refresh = datetime.utcnow() + timedelta(minutes=AUTH_REFRESH_TOKEN_EXPIRE_MINUTES)
+        refresh_token = jwt.encode(
+            {"sub": data.get('sub'), "exp": expire_refresh},
+            AUTH_SECRET_KEY,
+            algorithm=AUTH_HASHING_ALGORITHM
+        )
+        return {'access_token': access_token, 'refresh_token': refresh_token}
 
     @staticmethod
     def decrypt_token(token: str) -> dict:
         if token:
             try:
-                encoded = jwt.decode(token, key=AUTH_SECRET_KEY)
-            except Exception:
-                encoded = None
-
-            data = type(encoded) is dict and encoded.get("subject")
-
-            if not data:
+                decoded = jwt.decode(token, key=AUTH_SECRET_KEY)
+                return decoded
+            except jwt.ExpiredSignatureError:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail={"type": "auth.token_expired"},
+                )
+            except jwt.InvalidTokenError:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail={"type": "auth.token_invalid"},
                 )
-
-            return data
-
         return None
