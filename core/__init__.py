@@ -2,6 +2,7 @@ from .exceptions import EnvDependNotFound
 from .internals import OrmInternalService, get_application
 from .schemas import ErrorDetails
 from .loggers import logger
+from .auth import AuthToken, get_current_user, IsAuthenticated, is_admin, is_active, BaseRoute
 
 
 __all__ = (
@@ -10,4 +11,10 @@ __all__ = (
     'get_application',
     'ErrorDetails',
     'logger',
+    'AuthToken',
+    'get_current_user',
+    'IsAuthenticated',
+    'is_admin',
+    'is_active',
+    'BaseRoute'
 )
