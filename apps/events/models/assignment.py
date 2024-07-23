@@ -1,6 +1,7 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import String, ForeignKey, Column, Integer, Date
+from sqlalchemy import String, ForeignKey, Column, Integer, Date, Enum
 
+from apps.events.schemas.assignment import AssignmentType
 from db import Base
 
 
@@ -13,6 +14,7 @@ class Assignment(Base):
     created_at = Column(Date, nullable=False)
     due_date = Column(Date, nullable=False)
     teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    type = Column(Enum(AssignmentType, name="assignmenttype"), nullable=False)
 
     # Relationships
     teacher = relationship(

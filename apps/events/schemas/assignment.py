@@ -1,6 +1,14 @@
-from pydantic import BaseModel, ConfigDict
+from enum import Enum
+
+from pydantic import BaseModel
 
 from datetime import datetime
+
+
+class AssignmentType(str, Enum):
+    EXAM = "exam"
+    CREDIT = "credit"
+    HOMEWORK = "homework"
 
 
 class AssignmentBase(BaseModel):
