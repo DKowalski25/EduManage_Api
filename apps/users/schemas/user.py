@@ -3,32 +3,33 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 
-class UserBase(BaseModel):
+class User(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
     phone_number: str
     role: str
 
+    class Config:
+        from_attributes = True
 
-class UserCreate(UserBase):
+
+class UserCreate(User):
     password: str
 
 
-class UserUpdate(UserBase):
+class UserUpdate(User):
     pass
 
 
-class User(UserBase):
+class FullUser(BaseModel):
     id: int
-    created_at: datetime
-    updated_at: datetime | None
-    classes: list[int] | None  # List of class IDs (for teachers).
-    assignments: list[int] | None  # List of assignment IDs.
-    assigned_tasks: list[int] | None  # List of assigned task IDs.
-    marks: list[int] | None  # List of mark IDs.
-
-    # model_config = ConfigDict(from_attributes=True)
+    first_name: str
+    last_name: str
+    email: EmailStr
+    phone_number: str
+    role: str
+    hashed_password: str
 
     class Config:
         from_attributes = True

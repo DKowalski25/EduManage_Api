@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy.orm import selectinload
 
 from ..models.assignment import Assignment as AssignmentModel
-from ..schemas.assignment import Assignment, AssignmentCreate, AssignmentUpdate
+from ..schemas.assignment import Assignment, AssignmentCreate, AssignmentUpdate, AssignmentBase
 
 from apps.users.models.user import User as UserModel
 from db import async_session
@@ -23,8 +23,19 @@ class AssignmentStorage:
             )
             result = await session.execute(stmt)
             assignments = result.scalars().all()
-
-            return [Assignment.model_validate(assignment) for assignment in assignments]
+            # Преобразование в схемы Pydantic
+            return [
+                Assignment(
+                    id=assignment.id,
+                    title=assignment.title,
+                    description=assignment.description,
+                    due_date=assignment.due_date,
+                    created_at=assignment.created_at,
+                    teacher_id=assignment.teacher_id,
+                    assigned_tasks=[task.id for task in assignment.assigned_tasks]
+                ) for assignment in assignments
+            ]
+            # return [Assignment.from_orm(assignment) for assignment in assignments]
 
     @classmethod
     async def get_assignment_by_id(cls, assignment_id: int) -> Assignment:

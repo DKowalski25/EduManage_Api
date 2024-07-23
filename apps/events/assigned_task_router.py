@@ -1,13 +1,15 @@
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
 
-from core import ErrorDetails
+from core import ErrorDetails, BaseRoute, IsAuthenticated
 
 from .schemas import AssignedTask, AssignedTaskUpdate, AssignedTaskCreate
 from .cases import AssignedTaskCases
 from .container import Container
 
 router = APIRouter(
+    route_class=BaseRoute,
+    dependencies=[Depends(IsAuthenticated())],
     responses={
         401: {"model": ErrorDetails},
         404: {"model": ErrorDetails},
