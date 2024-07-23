@@ -1,4 +1,4 @@
-from .exceptions import EnvDependNotFound
+from .exceptions import EnvDependNotFound, AppException
 from .internals import OrmInternalService, get_application
 from .schemas import ErrorDetails
 from .loggers import logger
@@ -16,5 +16,6 @@ __all__ = (
     'IsAuthenticated',
     'is_admin',
     'is_active',
-    'BaseRoute'
+    'BaseRoute',
+    'AppException'
 )

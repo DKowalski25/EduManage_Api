@@ -35,7 +35,7 @@ class AuthToken:
         return {'access_token': access_token, 'refresh_token': refresh_token}
 
     @staticmethod
-    def decrypt_token(token: str) -> dict:
+    def decrypt_token(token: str) -> dict | None:
         if token:
             try:
                 decoded = jwt.decode(token, key=AUTH_SECRET_KEY)
