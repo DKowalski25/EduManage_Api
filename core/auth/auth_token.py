@@ -35,11 +35,12 @@ class AuthToken:
         return {'access_token': access_token, 'refresh_token': refresh_token}
 
     @staticmethod
-    def decrypt_token(token: str) -> dict | None:
+    def decrypt_token(token: str) -> dict:
         if token:
             try:
-                decoded = jwt.decode(token, key=AUTH_SECRET_KEY)
-                return decoded
+                # Указываем алгоритмы для декодирования
+                encoded = jwt.decode(token, key=AUTH_SECRET_KEY, algorithms=[AUTH_HASHING_ALGORITHM])
+                return encoded  # Возвращаем весь декодированный токен
             except jwt.ExpiredSignatureError:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -50,4 +51,7 @@ class AuthToken:
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail={"type": "auth.token_invalid"},
                 )
-        return None
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"type": "auth.token_missing"},
+        )
