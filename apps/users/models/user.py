@@ -20,6 +20,7 @@ class User(Base):
     phone_number = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, nullable=False)
+    sign_in_records = relationship('SignInRecord')
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     group_id = Column(Integer, ForeignKey("groups.id"))
