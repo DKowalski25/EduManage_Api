@@ -1,16 +1,16 @@
 from core import logger
 from scripts.db_session import db_session
 
-from apps.events.models import Assignment
+from apps.events.models import Assignment, AssignmentType
 from apps.users.models import User
 
 ASSIGNMENTS = [
     {"title": "Assignment 1", "description": "Description 1", "created_at": "2024-01-01", "due_date": "2024-01-10",
-     "teacher_email": "teacher1@example.com", "type": "homework"},
+     "teacher_email": "teacher1@example.com", "type": AssignmentType.homework.value},
     {"title": "Assignment 2", "description": "Description 2", "created_at": "2024-01-01", "due_date": "2024-01-10",
-     "teacher_email": "teacher2@example.com", "type": "exam"},
+     "teacher_email": "teacher2@example.com", "type": AssignmentType.exam.value},
     {"title": "Assignment 3", "description": "Description 3", "created_at": "2024-01-01", "due_date": "2024-01-10",
-     "teacher_email": "teacher2@example.com", "type": "credit"}
+     "teacher_email": "teacher2@example.com", "type": AssignmentType.credit.value}
 ]
 
 
