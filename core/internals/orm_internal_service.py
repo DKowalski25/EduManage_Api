@@ -20,7 +20,9 @@ class OrmInternalService(BaseImportService):
             not_checked_message=cls.METADATA_NOT_CHECKED_MESSAGE
         )
 
-        metadata = [metadata_item['value'].metadata for metadata_item in metadata]
+        metadata = [item['value'].metadata for item in metadata if hasattr(item['value'], 'metadata')]  # Added ->
+        # -> (if hasattr(item['value'], 'metadata')) for Enum
+
         return Base.metadata
 
     @classmethod

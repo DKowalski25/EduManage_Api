@@ -2,7 +2,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import String, Column, Integer, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
-from apps.events.models.teacher_class import teacher_class_association_table
+# from apps.events.models.teacher_class import teacher_class_association_table
 
 from db import Base
 
@@ -28,7 +28,7 @@ class User(Base):
     # Relationships
     classes = relationship(
         "Group",
-        secondary=teacher_class_association_table,
+        secondary='teacher_class_association_table',
         back_populates="teachers",
     )
     assignments = relationship(
