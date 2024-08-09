@@ -1,17 +1,22 @@
 from core import logger
 from scripts.db_session import db_session
+
 from apps.users.models import User
 from apps.users.storages.user_storage import hash_password, get_random_string
 
 ADMINS = [
-    {"username": "admin", "password": "password", "role": "admin", "email": "admin@example.com", "first_name": "Admin",
-     "last_name": "User", "phone_number": "1234567890"},
+    {"first_name": "Admin", "last_name": "Admin", "email": "admin@example.com", "phone_number": "1234567890",
+     "password": "password", "role": "admin"},
 ]
 
 
 def perform(*args, **kwargs):
     for data in ADMINS:
-        is_admin_exists = db_session.query(User).filter_by(username=data["username"]).all()
+        is_admin_exists = db_session.query(User).filter_by(
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+        ).all()
+
         salt = get_random_string()
 
         if not is_admin_exists:
@@ -24,9 +29,9 @@ def perform(*args, **kwargs):
                 "hashed_password": f"{salt}${hash_password(data['password'], salt)}",
             }
             db_session.add(User(**admin))
-            logger.info(f"Admin {data['username']} created")
+            logger.info(f"Admin {data['first_name']} {data['last_name']} created")
         else:
-            logger.warning(f"Admin {data['username']} already exists")
+            logger.warning(f"Admin {data['first_name']} {data['last_name']} already exists")
 
     db_session.commit()
     db_session.close()
