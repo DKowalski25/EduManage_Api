@@ -1,8 +1,15 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy import String, ForeignKey, Column, Integer, Date, Enum
+import enum
 
-from apps.events.schemas.assignment import AssignmentType
+from sqlalchemy.orm import relationship
+from sqlalchemy import String, ForeignKey, Column, Integer, Date, Enum as SQLAlchemyEnum
+
 from db import Base
+
+
+class AssignmentType(enum.Enum):
+    EXAM = 'exam'
+    CREDIT = 'credit'
+    HOMEWORK = 'homework'
 
 
 class Assignment(Base):
@@ -14,7 +21,7 @@ class Assignment(Base):
     created_at = Column(Date, nullable=False)
     due_date = Column(Date, nullable=False)
     teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    type = Column(Enum(AssignmentType, name="assignmenttype"), nullable=False)
+    type = Column(SQLAlchemyEnum(AssignmentType, name="assignmenttype"), nullable=False)
 
     # Relationships
     teacher = relationship(
