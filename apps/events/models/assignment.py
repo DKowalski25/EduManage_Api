@@ -7,9 +7,9 @@ from db import Base
 
 
 class AssignmentType(enum.Enum):
-    EXAM = 'exam'
-    CREDIT = 'credit'
-    HOMEWORK = 'homework'
+    exam = 'exam'
+    credit = 'credit'
+    homework = 'homework'
 
 
 class Assignment(Base):
