@@ -12,6 +12,7 @@ class User(Base):
 
     TEACHER = "teacher"
     STUDENT = "student"
+    ADMIN = "admin"
 
     id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=False)

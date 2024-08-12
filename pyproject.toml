@@ -22,6 +22,9 @@ dependency-injector = "^4.41.0"
 greenlet = "^3.0.3"
 fastapi-jwt = "^0.3.0"
 pyjwt = "^2.8.0"
+flask = "2.2.3"
+flask-admin = "1.6.1"
+werkzeug = "==2.3.6"
 
 
 [build-system]
