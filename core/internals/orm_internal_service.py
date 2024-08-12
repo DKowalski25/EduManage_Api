@@ -31,7 +31,8 @@ class OrmInternalService(BaseImportService):
         # for Flask Admin
         models = cls.get_items(
             target_subfolders=cls.TARGET_SUBFOLDERS,
-            not_checked_message=cls.MODELS_NOT_CHECKED_MESSAGE
+            not_checked_message=cls.MODELS_NOT_CHECKED_MESSAGE,
         )
 
-        return [model['value'] for model in models]
+        return [model['value'] for model in models]  # Added ->
+        # -> isinstance(model['value'], Base)  if isinstance(model['value'], Base)
