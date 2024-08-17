@@ -5,6 +5,13 @@ description = ""
 authors = ["DKowalski25 <dshinoda25@gmail.com>"]
 readme = "README.md"
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore:The event_loop fixture provided by pytest-asyncio has been redefined in:DeprecationWarning",
+    "ignore::UserWarning",
+]
+
 [tool.poetry.dependencies]
 python = "^3.11"
 fastapi = "^0.111.0"
@@ -26,6 +33,7 @@ flask = "2.2.3"
 flask-admin = "1.6.1"
 werkzeug = "==2.3.6"
 pytest = "^8.3.2"
+pytest-asyncio = "^0.23.8"
 
 
 [build-system]
