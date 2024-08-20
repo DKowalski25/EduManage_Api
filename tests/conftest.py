@@ -11,12 +11,11 @@ from core import OrmInternalService, get_application
 from db import async_session, Base
 from settings import (DB_HOST_TEST, DB_NAME_TEST, DB_PASS_TEST, DB_PORT_TEST,
                       DB_USER_TEST)
-
 # DATABASE
 DATABASE_URL_TEST = f"postgresql+asyncpg://{DB_USER_TEST}:{DB_PASS_TEST}@{DB_HOST_TEST}:{DB_PORT_TEST}/{DB_NAME_TEST}"
 
 engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
-async_session_maker_test = async_sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
+async_session_maker_test = async_sessionmaker(bind=engine_test, class_=AsyncSession, expire_on_commit=False)
 
 OrmInternalService.get_models_metadata()
 Base.metadata.bind = engine_test
@@ -25,6 +24,12 @@ Base.metadata.bind = engine_test
 async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker_test() as session:
         yield session
+
+
+# @pytest.fixture(scope="session")
+# def override_async_session():
+#     """Переопределяет стандартный async_session для использования тестовой базы данных."""
+#     return async_session_maker_test
 
 
 @pytest.fixture(scope="session")
@@ -63,3 +68,5 @@ def client(app) -> TestClient:
 async def ac(app) -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
+
+
