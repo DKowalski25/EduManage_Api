@@ -31,6 +31,9 @@ DB_USER_TEST = os.environ.get("DB_USER_TEST")
 DB_PASS_TEST = os.environ.get("DB_PASS_TEST")
 DB_PORT_TEST = int(os.environ.get("DB_PORT_TEST"))
 
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+
 
 LOGURU_BACKTRACE = True
 LOGURU_DIAGNOSE = True
