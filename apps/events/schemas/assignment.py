@@ -15,6 +15,7 @@ class AssignmentBase(BaseModel):
     title: str
     description: str
     due_date: datetime
+    type: AssignmentType
 
 
 class AssignmentCreate(AssignmentBase):
