@@ -9,7 +9,6 @@ readme = "README.md"
 asyncio_mode = "auto"
 filterwarnings = [
     "ignore:The event_loop fixture provided by pytest-asyncio has been redefined in:DeprecationWarning",
-    "ignore::UserWarning",
 ]
 
 [tool.poetry.dependencies]
