@@ -8,7 +8,6 @@ from apps.group.models import Group as GroupModel
 from apps.group.schemas import GroupCreate, GroupUpdate
 from apps.group.storages import GroupStorage
 from apps.group.cases import GroupCases
-from db import async_session
 
 
 @pytest.fixture(scope="function")
@@ -22,9 +21,9 @@ async def group_data():
 
 
 @pytest.fixture(scope="function")
-async def group_storage():
+async def group_storage(override_async_session):
     """Возвращает экземпляр GroupStorage для работы с базой данных."""
-    return GroupStorage()
+    return GroupStorage(session_maker=override_async_session)
 
 
 @pytest.fixture(scope="function")
