@@ -31,6 +31,7 @@ class AssignmentStorage:
                     description=assignment.description,
                     due_date=assignment.due_date,
                     created_at=assignment.created_at,
+                    type=assignment.type,
                     teacher_id=assignment.teacher_id,
                     assigned_tasks=[task.id for task in assignment.assigned_tasks]
                 ) for assignment in assignments
@@ -69,7 +70,8 @@ class AssignmentStorage:
                 description=assignment_create.description,
                 due_date=assignment_create.due_date,
                 created_at=datetime.now(),
-                teacher_id=assignment_create.teacher_id
+                teacher_id=assignment_create.teacher_id,
+                type=assignment_create.type
             )
             session.add(assignment)
             await session.commit()

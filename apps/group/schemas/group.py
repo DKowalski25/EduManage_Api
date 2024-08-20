@@ -25,5 +25,9 @@ class Group(GroupBase):
     students: list[int] | None  # List of student IDs.
     assigned_tasks: list[int] | None  # List of assigned task IDs.
 
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
+
+    model_config = ConfigDict(
+        from_attributes=True,
+    )

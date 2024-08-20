@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from datetime import datetime
 
@@ -15,6 +15,7 @@ class AssignmentBase(BaseModel):
     title: str
     description: str
     due_date: datetime
+    type: AssignmentType
 
 
 class AssignmentCreate(AssignmentBase):
@@ -31,5 +32,6 @@ class Assignment(AssignmentBase):
     teacher_id: int
     assigned_tasks: list[int] | None  # List of assigned task IDs.
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
