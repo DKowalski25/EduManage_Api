@@ -11,10 +11,6 @@ from db import async_session
 class GroupStorage:
     _table = GroupModel
 
-    # def __init__(self, session_maker=async_session):
-    #     print(f"Using session_maker: {session_maker}")  # Debug line
-    #     self.session_maker = session_maker
-
     @classmethod
     async def get_all_groups(cls) -> list[Group]:
         async with async_session() as session:
