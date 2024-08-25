@@ -31,6 +31,9 @@ DB_USER_TEST = os.environ.get("DB_USER_TEST")
 DB_PASS_TEST = os.environ.get("DB_PASS_TEST")
 DB_PORT_TEST = int(os.environ.get("DB_PORT_TEST"))
 
+TEST_DB_URL = f"postgresql+asyncpg://{DB_USER_TEST}:{DB_PASS_TEST}@{DB_HOST_TEST}:{DB_PORT_TEST}/{DB_NAME_TEST}"
+TEST_DB_IDEMPOTENT = True
+
 
 LOGURU_BACKTRACE = True
 LOGURU_DIAGNOSE = True
