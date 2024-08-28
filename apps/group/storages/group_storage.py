@@ -106,8 +106,9 @@ class GroupStorage:
 
             if group:
                 # Delete user
-                await session.delete(group)  # use await
+                await session.delete(group)
                 await session.commit()
+                return Group.model_validate(group)
+            else:
+                return None
 
-            # Return deleted user
-        return Group.model_validate(group)
