@@ -76,7 +76,7 @@ class GroupStorage:
 
             if group:
                 # Updating user fields
-                for field, value in group_update.dict(exclude_unset=True).items():
+                for field, value in group_update.model_dump(exclude_unset=True).items():
                     setattr(group, field, value)
 
                 await session.commit()
