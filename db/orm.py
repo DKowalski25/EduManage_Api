@@ -11,7 +11,7 @@ engine = create_async_engine(
     f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
     echo=LOG_ORM,
     pool_size=100,
-    max_overflow=0,
+    max_overflow=15,
 )
 
 async_session = async_sessionmaker(
