@@ -11,6 +11,9 @@ filterwarnings = [
     "ignore:The event_loop fixture provided by pytest-asyncio has been redefined in:DeprecationWarning",
 ]
 
+[tool.pytest.markers]
+with_db = "mark test to use database fixture"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 fastapi = "^0.111.0"
