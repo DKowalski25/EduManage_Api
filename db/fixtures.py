@@ -2,7 +2,6 @@ import asyncio
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import sessionmaker
 
 from core.internals.orm_internal_service import OrmInternalService
 from settings import TEST_DB_URL, TEST_DB_IDEMPOTENT
@@ -14,15 +13,14 @@ from .containers import db_container
 async def db_engine(request):
     """yields a SQLAlchemy engine which is suppressed after the test session"""
 
-    db_url = request.config.getoption("--dburl", TEST_DB_URL)
-
+    db_url = TEST_DB_URL
     if not db_url:
         raise Exception('Configure db_url via --dburl flag or TEST_DB_URL env')
 
     engine = create_async_engine(
         db_url,
         echo=LOG_ORM,
-        pool_size=5,
+        pool_size=100,
         max_overflow=15,
     )
 
@@ -46,6 +44,7 @@ async def db_session(db_engine, db_sessionmaker):
 
     async with db_sessionmaker() as sess:
         yield sess
+        await sess.rollback()
 
 
 lock = asyncio.Lock()

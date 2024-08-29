@@ -1,9 +1,10 @@
 from dependency_injector import containers, providers
 
-from apps.group.storages import GroupStorage
 from db.orm import async_session
 
 from apps.group.container import Container as GroupContainer
+from apps.events.container import Container as EventsContainer
+from apps.users.features.auth.containers import Container as UserContainer
 
 
 class DatabaseContainer(containers.DeclarativeContainer):
@@ -13,6 +14,9 @@ class DatabaseContainer(containers.DeclarativeContainer):
     session = providers.Singleton(async_session)
 
     group_storage = providers.Singleton(GroupContainer.group_storage)
+    mark_storage = providers.Singleton(EventsContainer.mark_storage)
+    assignment_storage = providers.Singleton(EventsContainer.assignment_storage)
+    user_storage = providers.Singleton(UserContainer.user_storage)
 
 
 # Экспортируем экземпляр контейнера для использования в тестах
