@@ -45,6 +45,20 @@ class GroupStorage:
         return Group.model_validate(group) if group else None
 
     @classmethod
+    async def get_emails_by_group_id(cls, group_id: int) -> list[str]:
+        async with async_session() as session:
+            stmt = select(cls._table).filter(cls._table.id == group_id).options(
+                selectinload(cls._table.students)
+            )
+            result = await session.execute(stmt)
+            group = result.scalar_one_or_none()
+
+            if group:
+                student_emails = [student.email for student in group.students]
+                return student_emails
+            return []
+
+    @classmethod
     async def create_group(cls, group_create: GroupCreate) -> Group:
         async with async_session() as session:
             group = cls._table(

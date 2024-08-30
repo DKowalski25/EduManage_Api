@@ -77,6 +77,17 @@ class UserStorage:
         return User.model_validate(user) if user else None
 
     @classmethod
+    async def get_email_by_student_id(cls, student_id: int) -> str | None:
+        async with async_session() as session:
+            stmt = select(cls._table).filter(cls._table.id == student_id)
+            result = await session.execute(stmt)
+            student = result.scalar_one_or_none()
+
+            if student:
+                return student.email
+            return None
+
+    @classmethod
     async def get_user_by_identity(cls, email: str) -> FullUser | None:
         async with async_session() as session:
             query = await session.execute(select(cls._table).filter(cls._table.email == email))
